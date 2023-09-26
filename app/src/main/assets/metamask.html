@@ -1,0 +1,24 @@
+<html>
+<body bgcolor="red">
+<script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+<script type="text/javascript">
+        async function requestEncryptionPublicKey(address) {
+        try {
+          const publicKey = await window.ethereum.request({
+            method: "eth_getEncryptionPublicKey",
+            params: [address],
+          });
+
+          // Use the publicKey as needed
+          console.log("Encryption Public Key:", publicKey);
+          Dialog.showMsg(publicKey)
+
+          // You can call any other functions or perform actions with the publicKey here
+        } catch (error) {
+          console.error("Failed to obtain the public key:", error);
+        }
+      }
+
+</script>
+</body>
+</html>

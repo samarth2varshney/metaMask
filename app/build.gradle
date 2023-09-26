@@ -51,4 +51,5 @@ dependencies {
 
     // viewmodel-related
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
+    implementation 'org.web3j:core:5.0.0'
 }
