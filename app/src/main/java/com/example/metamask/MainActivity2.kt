@@ -22,6 +22,24 @@ class MainActivity2 : AppCompatActivity() {
     private lateinit var button: Button
     private lateinit var fileButton: Button
     lateinit var ivValue: ByteArray
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main3)
+
+        textView = findViewById(R.id.textView1)
+        button = findViewById(R.id.button1)
+        fileButton = findViewById(R.id.button5)
+
+        textView.text = "SECURE TEXT" //TODO generate random secrete key
+
+        fileButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+            intent.addCategory(Intent.CATEGORY_OPENABLE)
+            intent.type = "*/*"
+
+            pickFileLauncher.launch(intent)
+        }
+    }
 
     private val pickFileLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -31,7 +49,7 @@ class MainActivity2 : AppCompatActivity() {
                     val selectedFileUri: Uri? = data.data
                     Log.d("FILE", "SELECTEDFILEURI: ${selectedFileUri}")
                     if (selectedFileUri != null) {
-                        val fileBytes = readFileFromUri(selectedFileUri)
+                        val fileBytes = readFileFromUri(selectedFileUri) //byte array conversion
                         Log.d("FILE", "FILBYTES: ${fileBytes}")
                         if (fileBytes != null) {
                             val encryptedBytes = encrypt(fileBytes)
@@ -45,6 +63,7 @@ class MainActivity2 : AppCompatActivity() {
                         }
                     }
                 }
+
             }
         }
 
@@ -58,24 +77,6 @@ class MainActivity2 : AppCompatActivity() {
         return null
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main3)
-
-        textView = findViewById(R.id.textView1)
-        button = findViewById(R.id.button1)
-        fileButton = findViewById(R.id.button5)
-
-        textView.text = "SECURE TEXT"
-
-        fileButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
-            intent.type = "*/*"
-
-            pickFileLauncher.launch(intent)
-        }
-    }
 
     private fun encrypt(dataToEncrypt: ByteArray): ByteArray {
         val key = generateKey(textView.text.toString())
