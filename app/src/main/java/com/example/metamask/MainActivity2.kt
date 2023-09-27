@@ -21,7 +21,6 @@ class MainActivity2 : AppCompatActivity() {
     private lateinit var textView: TextView
     private lateinit var button: Button
     private lateinit var fileButton: Button
-    private lateinit var pinataUploader: PinataUploader
     lateinit var ivValue: ByteArray
 
     private val pickFileLauncher =
@@ -31,11 +30,6 @@ class MainActivity2 : AppCompatActivity() {
                 if (data != null) {
                     val selectedFileUri: Uri? = data.data
                     Log.d("FILE", "SELECTEDFILEURI: ${selectedFileUri}")
-                    GlobalScope.launch {
-                        if (selectedFileUri != null) {
-                            PinataUploader().uploadFileToPinata(this@MainActivity2,selectedFileUri)
-                        }
-                    }
                     if (selectedFileUri != null) {
                         val fileBytes = readFileFromUri(selectedFileUri)
                         Log.d("FILE", "FILBYTES: ${fileBytes}")
@@ -43,10 +37,11 @@ class MainActivity2 : AppCompatActivity() {
                             val encryptedBytes = encrypt(fileBytes)
                             Log.d("FILE", "ENCRYPTEDBYTES: ${encryptedBytes}")
                             findViewById<TextView>(R.id.textView3).text = encryptedBytes.toString()
-
-                            // Save the encrypted data or use it as needed
-                            // For example, you can save it to a new file
-//                            saveEncryptedDataToFile(encryptedBytes, selectedFileUri)
+                            GlobalScope.launch {
+                                if (selectedFileUri != null) {
+                                    PinataUploader().uploadFileToPinata(encryptedBytes)
+                                }
+                            }
                         }
                     }
                 }
@@ -63,11 +58,6 @@ class MainActivity2 : AppCompatActivity() {
         return null
     }
 
-    private fun saveEncryptedDataToFile(encryptedData: ByteArray, originalFileUri: Uri) {
-        // Implement code to save the encrypted data to a new file or overwrite the original file
-        // For example, you can use FileOutputStream to write the encrypted data to a new file
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main3)
@@ -78,9 +68,6 @@ class MainActivity2 : AppCompatActivity() {
 
         textView.text = "SECURE TEXT"
 
-//        button.setOnClickListener {
-//            findViewById<TextView>(R.id.textView3).text = encrypt("HELLO WORLD").toString()
-//        }
         fileButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
             intent.addCategory(Intent.CATEGORY_OPENABLE)
