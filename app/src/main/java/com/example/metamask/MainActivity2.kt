@@ -28,7 +28,7 @@ class MainActivity2 : AppCompatActivity() {
 
         textView = findViewById(R.id.textView1)
         button = findViewById(R.id.button1)
-        fileButton = findViewById(R.id.button5)
+        fileButton = findViewById(R.id.uploadButton)
 
         textView.text = "SECURE TEXT" //TODO generate random secrete key
 
